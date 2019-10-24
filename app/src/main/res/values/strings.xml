@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FalcesoEmmanuelLab4</string>
+    <string name="app_name">ANDROID VERSIONS</string>
     <string-array name="android">
         <item>No codename!1.0!September 23, 2008!1!N/A</item>
         <item>Petit Four (only internally used)!1.1!February 9, 2009!2!N/A</item>
