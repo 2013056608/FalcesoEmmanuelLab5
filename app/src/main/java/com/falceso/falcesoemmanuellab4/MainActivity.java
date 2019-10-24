@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,11 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("error",detail[3]);
             final int iterator = i;
-            details.append("Cupcake");
+            details.append(detail[0]);
             details.append("\nVer. " + detail[1]);
             details.append("\nAPI level " + detail[3]);
             details.append("\nReleased " + detail[2]);
-            img.setImageResource(draw[i]);
+
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(),draw[i]);
+            bmp = Bitmap.createScaledBitmap(bmp,450,300, true);
+
+            img.setImageBitmap(bmp);
             currLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -65,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-
             text.setText(details.toString());
-
+            text.setTextSize(25);
             currLayout.addView(img);
             currLayout.addView(text);
 
