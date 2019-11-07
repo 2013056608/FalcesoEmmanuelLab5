@@ -7,12 +7,19 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.jellybean, R.drawable.kitkat, R.drawable.lollipop, R.drawable.marshmallow,
             R.drawable.nougat, R.drawable.oreo, R.drawable.pie, R.drawable.android10};
 
+    private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         String[] androidVer = getResources().getStringArray(R.array.android);
         LinearLayout mainLayout = findViewById(R.id.main_layout);
 
+        file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "android.txt");
 
 
         for(int i = 0; i < androidVer.length; i++){
@@ -62,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
                     dialog.setNeutralButton("CLOSE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick (DialogInterface dialog,int which){
-                            dialog.dismiss();
+                            writeData("API level " + detail[3] + " - Released in " + detail[2]);
+                            String detail = readData();
+                            Toast.makeText(MainActivity.this, detail, Toast.LENGTH_SHORT).show();
                         }
                     });
                     dialog.create().show();
@@ -80,9 +91,36 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
 
+    private String readData() {
+        FileInputStream stream = null;
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "android.txt");
+        StringBuilder sb = new StringBuilder();
+        try {
+            stream = new FileInputStream(file);
+            int i;
+            while ((i = stream.read()) != -1) {
+                sb.append((char) i);
+            }
+            return sb.toString();
+        } catch (FileNotFoundException e) {
+            Log.d("error", "File not found");
+        } catch (IOException e) {
+            Log.d("error", "IO error");
+        }
+        return null;
+    }
 
-
-
+    private void writeData(String data) {
+        FileOutputStream stream = null;
+        try {
+            stream = new FileOutputStream(file);
+            stream.write(data.getBytes());
+        } catch (FileNotFoundException e) {
+            Log.d("error", "File not found");
+        } catch (IOException e) {
+            Log.d("error", "IO error");
+        }
     }
 }
